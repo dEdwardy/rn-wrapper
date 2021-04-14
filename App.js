@@ -23,7 +23,7 @@ class App extends React.Component {
         return false;
       } else {
         lastTime = time;
-        ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+        // ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
         // eslint-disable-next-line no-undef
         webview.goBack();
         return true;
