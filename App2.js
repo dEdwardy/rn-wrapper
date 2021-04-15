@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {BackHandler, ToastAndroid} from 'react-native';
+import {BackHandler} from 'react-native';
 import {WebView} from 'react-native-webview';
+import SplashScreen from 'react-native-splash-screen';
 
 let lastTime = 0;
 let webview;
@@ -17,6 +18,9 @@ export function App() {
         setCanBack(false);
       }
     }
+  };
+  const onLoadEnd = () => {
+    SplashScreen.hide();
   };
   const onBackAndroid = () => {
     if (canBack) {
@@ -45,14 +49,32 @@ export function App() {
       BackHandler.removeEventListener('hardwareBackPress', onBackAndroid);
     };
   });
+  const INJECTED_JAVASCRIPT = `(function() {
+    window.ReactNativeWebView.postMessage(JSON.stringify({enviroment:'app'}));
+  })()`;
   return (
     <>
       <WebView
         ref={(w) => (webview = w)}
-        onLoadEnd={this._onCustomLoading}
         nativeConfig={{props: {webContentsDebuggingEnabled: true}}}
-        onNavigationStateChange={this._onNavigationStateChange}
+        onLoadEnd={onLoadEnd}
+        onNavigationStateChange={onNavigationStateChange}
+        onMessage={(e) => console.log(e)}
+        injectedJavaScriptBeforeContentLoaded={INJECTED_JAVASCRIPT}
+        startInLoadingState={false}
         source={{uri: 'http://47.112.172.255/v3-mall/'}}
+        // source={{uri: 'http://192.168.79.228/v3-mall/'}}
+        onError={(syntheticEvent) => {
+          const {nativeEvent} = syntheticEvent;
+          console.log('WebView error: ', nativeEvent);
+        }}
+        onHttpError={(syntheticEvent) => {
+          const {nativeEvent} = syntheticEvent;
+          console.log(
+            'WebView received error status code: ',
+            nativeEvent.statusCode,
+          );
+        }}
         // source={{uri: 'http://192.168.138.193:3000/v3-mall/'}}
       />
     </>
