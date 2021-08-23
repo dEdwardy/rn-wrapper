@@ -62,8 +62,8 @@ export function App() {
         onMessage={(e) => console.log(e)}
         injectedJavaScriptBeforeContentLoaded={INJECTED_JAVASCRIPT}
         startInLoadingState={false}
-        source={{uri: 'http://47.112.172.255/v3-mall/'}}
-        // source={{uri: 'http://192.168.79.228/v3-mall/'}}
+        // source={{uri: 'http://edw4rd.cn/v3-mall/'}}
+        source={{uri: 'http://edw4rd.cn/v3-mall/'}}
         onError={(syntheticEvent) => {
           const {nativeEvent} = syntheticEvent;
           console.log('WebView error: ', nativeEvent);
